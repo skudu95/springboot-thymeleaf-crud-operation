@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Add New User</title>
+</head>
+
+<body>
+<div class="container">
+
+    <h3>User Directory</h3>
+    <hr>
+
+    <p class="h4 mb-4">Add New User</p>
+
+    <form action="#" th:action="@{/users/add}"
+          th:object="${user}" method="POST">
+        <!--Adding a hidden form field to handle the update-->
+<!--        <input type="hidden" th:field="*{id}"/>-->
+
+        <input type="text" th:field="*{firstName}"
+               class="form-control mb-4 col-4" placeholder="First Name">
+
+        <input type="text" th:field="*{lastName}"
+               class="form-control mb-4 col-4" placeholder="Last Name">
+
+        <input type="text" th:field="*{email}"
+               class="form-control mb-4 col-4" placeholder="Email">
+
+        <input type="text" th:field="*{userName}"
+               class="form-control mb-4 col-4" placeholder="UserName">
+
+        <!--        need help in this shit!!!!!!-->
+<!--        input type password makes the text invisible-->
+        <input type="password" th:field="*{password}"
+               class="form-control mb-4 col-4" placeholder="Password">
+
+<!--        assigning a role to the the user since it will have no role -->
+
+
+        <button type="submit" class="btn btn-info col-2">Add</button>
+    </form>
+
+    <!-- going back to the user list-->
+    <hr>
+    <a th:href="@{/users/list}">Back to User List</a>
+</div>
+</body>
+
+</html>

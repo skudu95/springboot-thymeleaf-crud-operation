@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>User Directory</title>
+</head>
+
+<body>
+
+<!--bootstrap container-->
+<div class="container">
+
+    <h3>User Directory</h3>
+    <hr>
+
+    <!--
+    //<    setting up authentication for the login
+     -->
+    <div>
+        User: <span sec:authentication="name"></span>
+        <br>
+        Role(s): <span sec:authentication="principal.authorities"></span>
+        <br><br>
+    </div>
+
+
+    <!--    searching users by username-->
+<!--    authorising only ADMIN and EDITOR roles to have access to the Search and Add User-->
+    <div sec:authorize="hasAnyAuthority('ADMIN' , 'EDITOR')">
+    <form th:action="@{/users/search}" class="form-inline">
+        <a th:href="@{/users/add}"
+           class="btn btn-primary btn-sm mr-5 mb-3">
+            Add User
+        </a>
+
+        <input class="form-control  ml-5 mr-sm-2 mb-3" type="search" name="userName" placeholder="Search by name"/>
+
+        <button class="btn btn-success mb-3" type="submit">Search</button>
+    </form>
+    </div>
+
+    <!-- //adding "Add" button// need commenting
+        <a th:href="@{/users/addUser}"
+           class="btn btn-primary btn-sm mb-3">
+            Add User
+        </a>
+    -->
+    <table class="table table-bordered table-striped">
+        <thead class="thread-dark">
+        <tr>
+            <!-- headers of the columns -->
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>UserName</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="tempUser : ${users}">
+            <!-- mistake: used "()" instead of using "{}" -->
+            <!-- fetching data -->
+            <td th:text="${tempUser.firstName}"/>
+            <td th:text="${tempUser.lastName}"/>
+            <td th:text="${tempUser.email}"/>
+            <td th:text="${tempUser.userName}"/>
+
+            <td>
+                <!--            another way of the update and delete-->
+
+                <!--                &lt;!&ndash;                allowing only the Admin to update and delete from  the user list&ndash;&gt;-->
+                <!--                <div sec:authorize="hasAnyAuthority('EDITOR', 'ADMIN')">-->
+
+                <!--                     // Adding update button // need commenting -->
+                <!--;        //            seems like made an issue ... tempUsers instead of tempUser -->
+                <!--                    <a th:href="@{/users/showFormForUpdate(userId=${tempUser.id})}"-->
+                <!--                       class="btn btn-info btn-sm">-->
+                <!--                        Update-->
+                <!--                    </a>-->
+
+                <!--                </div>-->
+
+                <!--                <div sec:authorize="hasAuthority('ADMIN')">-->
+
+                <!--                    &lt;!&ndash;                                    // Adding delete button // need commenting&ndash;&gt;-->
+                <!--                    <a th:href="@{/users/delete(userId=${tempUser.id})}"-->
+                <!--                       class="btn btn-danger btn-sm"-->
+                <!--                       onclick="if (!(confirm('Proceed to delete the user?'))) return false">-->
+                <!--                        Delete-->
+                <!--                    </a>-->
+
+                <!--                </div>-->
+
+
+                <div class="row">
+
+                    <div class="col-small">
+<!--                        authorising ADMIN and EDITOR to update any listed user -->
+                        <!--       // Adding update button // need commenting -->
+                        <div sec:authorize="hasAnyAuthority('ADMIN' , 'EDITOR')">
+                        <form action="#" th:action="@{/users/showFormForUpdate}" method="POST">
+
+                            <input type="hidden" name="userId" th:value="${tempUser.id}"/>
+                            <button type="submit" class="btn btn-info btn-sm ml-3 mr-1">
+                                Update
+                            </button>
+
+                        </form>
+                        </div>
+                    </div>
+
+                    <div class="col-small">
+                        <!-- // Adding delete button // need commenting-->
+<!--                        authorising only the ADMIN to access the delete-->
+                        <div sec:authorize="hasAuthority('ADMIN')">
+                        <form action="#" th:action="@{/users/delete}" method="POST">
+
+                            <input type="hidden" name="userId" th:value="${tempUser.id}"/>
+                            <button type="submit" class="btn btn-danger btn-sm ml-3 mr-1"
+                                    onclick="if (!(confirm('Proceed to delete the user?'))) return false">
+                                Delete
+                            </button>
+
+                        </form>
+                        </div>
+                    </div>
+                </div>
+
+            </td>
+
+            <!--
+            <td>
+                // Adding update button // need commenting
+                <a th:href="@{/users/showFormForUpdate(userId=${tempUser.id})}"
+                   class="btn btn-info btn-sm">
+                    Update
+                </a>
+
+              //  Adding delete button // need commenting
+                <a th:href="@{/users/delete(userId=${tempUser.id})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="if (!(confirm('Proceed to delete the user?'))) return false">
+                    Delete
+                </a>
+
+            </td>
+            -->
+        </tr>
+        </tbody>
+    </table>
+
+    <!--    Adding a  logout button-->
+    <form action="#" th:action="@{/logout}"
+          method="POST">
+
+        <input type="submit" value="Logout" class="btn btn-outline-primary mt-2"/>
+
+    </form>
+
+</div>
+
+</body>
+</html>
